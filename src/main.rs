@@ -15,6 +15,7 @@ where
 }
 
 fn aoc_09() {
+    #[derive(PartialEq, Eq, Hash, Clone, Debug)]
     struct XY {x: i32, y: i32}
 
     impl XY {
@@ -178,7 +179,25 @@ fn aoc_09() {
         
         }
     }
- }
+
+    let mut tail_pos: Vec<XY> = Vec::new();
+    let mut rope = Rope {head: XY {x: 0, y: 0}, tail: XY {x: 0, y: 0}, orientation: Heading::Centered};
+    if let Ok(lines) = read_lines("./input_09.txt") {
+        for line in lines {
+            if let Ok(ln) = line {
+                let (direction, steps) = ln.split_once(" ").unwrap();
+                for i in 0..steps.parse::<i32>().unwrap() {
+                    rope.step(direction);
+                    tail_pos.push(rope.tail.clone());
+                    println!("{:?}", tail_pos)
+                }
+            }
+        }
+    }
+
+    let total_unique = tail_pos.iter().collect::<HashSet<&XY>>().len();
+    println!("{}", total_unique)
+}
 // =========== Main ========= //
 fn main() {
     aoc_09();
